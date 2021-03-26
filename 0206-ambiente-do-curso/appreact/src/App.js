@@ -1,56 +1,80 @@
 import React from 'react';
 
-const titulo = <h1>Esse é um titulo</h1>;
+// Mostre os dados da aplicação, como aprensetado no vídeo
+// Não utilize CSS externo, use o style para mudar as cores
+// Se a situação estiver ativa pinte de verde, inativa vermelho
+// Se o gasto for maior que 10000 mostre uma mensagem
+const luana = {
+  cliente: 'Luana',
+  idade: 27,
+  compras: [
+    { nome: 'Notebook', preco: 'R$ 2500' },
+    { nome: 'Geladeira', preco: 'R$ 3000' },
+    { nome: 'Smartphone', preco: 'R$ 1500' },
+  ],
+  ativa: true,
+};
+
+const mario = {
+  cliente: 'Mario',
+  idade: 31,
+  compras: [
+    { nome: 'Notebook', preco: 'R$ 2500' },
+    { nome: 'Geladeira', preco: 'R$ 3000' },
+    { nome: 'Smartphone', preco: 'R$ 1500' },
+    { nome: 'Guitarra', preco: 'R$ 3500' },
+  ],
+  ativa: false,
+};
+
+const ricardo = {
+  cliente: 'Ricardo',
+  idade: 28,
+  compras: [],
+  ativa: true,
+};
+
+const listaClientes = [luana, mario, ricardo];
+
+listaClientes.forEach((cliente, index) => {
+  cliente['proximo'] = listaClientes[index + 1] || listaClientes[0];
+});
+
+const ativa = { color: 'Green' };
+
+const inativa = { color: 'Red' };
 
 const App = () => {
-  const [ativo, setAtivo] = React.useState(true);
-  const random = Math.random();
+  const [dados, setDados] = React.useState(luana);
 
-  const estiloP = {
-    color: 'blue',
-    fontSize: '10rem',
-  };
-
-  const mostrarNome = (returnUndefined) => {
-    console.log('Executando mostrar nome');
-    return returnUndefined ? undefined : 'Evandro';
-  };
-
-  const carro = {
-    marca: 'Ford',
-    rodas: 4,
+  const calcularGastos = (dado) => {
+    const valores = dado.compras.map(
+      (compra) => +compra.preco.replace('R$ ', '')
+    );
+    const valorFinal = valores.reduce((prev, curr) => prev + curr, 0);
+    dado['valorFinal'] = valorFinal;
+    return valorFinal;
   };
 
   return (
     <>
-      {/* <p>{carro}</p> Não valido */}
-      <p>{carro.marca}</p>
-      {titulo}
-      {/* <p>{mostrarNome}</p> Não valido */}
-      <p>{mostrarNome(true)}</p> {/* Undefined não aparece na tela */}
-      <p>{mostrarNome()}</p>
-      {/* <p>{new Date()}</p> Não valido */}
-      <p style={estiloP}>{new Date().getFullYear()}</p>
-      <p>{true}</p>
-      <p>{false}</p>
-      <p>{true ? 'True não aparece' : 'False também não'}</p>
-      <p>{false ? 'True não aparece' : 'False também não'}</p>
-      <p>{10}</p>
-      <p
-        className={ativo ? 'ativo' : 'inativo'}
-        onClick={() => setAtivo(!ativo)}
-      >
-        {random * 100}
+      <p>Nome: {dados.cliente}</p>
+      <p>Idade: {dados.idade}</p>
+      <p>
+        Situação:&nbsp;
+        {/* style={{color: dados.ativa ? 'green' : 'red' }} */}
+        <span style={dados.ativa ? ativa : inativa}>
+          {dados.ativa ? 'Ativa' : 'Inativa'}
+        </span>
       </p>
+      <p>Total gasto: R$ {calcularGastos(dados).toFixed(2)}</p>
+      {/* <p>
+        {/* {dados['valorFinal'] > 10000 ? 'Você está gastando muito' : undefined} *#/}
+        {dados['valorFinal'] > 10000 && 'Você está gastando muito'}
+      </p> */}
+      {dados['valorFinal'] > 10000 && <p>Você está gastando muito</p>}
+      <button onClick={() => setDados(dados['proximo'])}>Trocar cliente</button>
     </>
-    // <React.Fragment>
-    // Atalho <React.Fragment>
-    // <>
-    //   <label htmlFor="nome">Nome</label>
-    //   <input type="text" id="nome" />
-    // </>
-    // Atalho </React.Fragment>
-    // </React.Fragment>
   );
 };
 
