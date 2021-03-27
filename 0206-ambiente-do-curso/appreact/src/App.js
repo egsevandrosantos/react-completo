@@ -1,23 +1,27 @@
-import React, { Fragment } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import React from 'react';
 import Form from './form/Form';
 
-const Teste = () => {
-  const active = false;
-  return active ? <p>Teste</p> : null;
+const Titulo = ({ cor, texto, children }) => {
+  return (
+    <>
+      <h1 style={{ color: cor }}>{texto}</h1>
+      {children}
+    </>
+  );
 };
 
 const App = () => {
   return (
-    <Fragment>
-      {/* React.Fragment desestruturado no import */}
-      <Teste />
-      <Header />
-      <p>App</p>
+    <>
+      <Titulo cor="red" texto="Meu titulo 1">
+        <p>Eu sou um children P</p>
+      </Titulo>
+      <Titulo cor="blue" texto="Meu titulo 2">
+        Eu sou um children texto puro
+      </Titulo>
+      <Titulo texto="Meu titulo 3" />
       <Form />
-      <Footer />
-    </Fragment>
+    </>
   );
 };
 

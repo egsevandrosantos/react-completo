@@ -1,7 +1,9 @@
 import React from 'react';
 
-function Button() {
-  return <button>Enviar</button>;
+function Button(props) {
+  console.log(props);
+
+  return <button>Clique</button>;
 }
 
 export default Button;

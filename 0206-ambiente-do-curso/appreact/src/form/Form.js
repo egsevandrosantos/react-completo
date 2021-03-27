@@ -3,17 +3,17 @@ import Button from './Button';
 import Input from './Input';
 
 function Form() {
+  const arr = ['Item 1', 'Item 2'];
+
   return (
     <form>
       <p>
-        <label htmlFor="nome">Nome</label>
-        <Input />
+        <Input id="email" label="Email" required />
       </p>
       <p>
-        <label htmlFor="email">Email</label>
-        <Input />
+        <Input id="senha" label="Senha" type="password" />
       </p>
-      <Button />
+      <Button items={arr} />
     </form>
   );
 }
