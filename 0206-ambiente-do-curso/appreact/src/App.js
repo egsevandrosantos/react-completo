@@ -1,26 +1,24 @@
 import React from 'react';
-import Form from './form/Form';
+import Home from './Home';
+import Nav from './Nav';
+import Produtos from './Produtos';
 
-const Titulo = ({ cor, texto, children }) => {
-  return (
-    <>
-      <h1 style={{ color: cor }}>{texto}</h1>
-      {children}
-    </>
-  );
-};
+// Replique a interface como a apresentada na aula
+// Utilize a array abaixo para mostrar os produtos
+// Quebre em componentes o que precisar ser reutilizado
+// Dica: const { pathname } = window.location; (puxa o caminho do URL)
+const produtos = [
+  { nome: 'Notebook', propriedades: ['16gb ram', '512gb'] },
+  { nome: 'Smartphone', propriedades: ['2gb ram', '128gb'] },
+];
 
 const App = () => {
+  const { pathname } = window.location;
+
   return (
     <>
-      <Titulo cor="red" texto="Meu titulo 1">
-        <p>Eu sou um children P</p>
-      </Titulo>
-      <Titulo cor="blue" texto="Meu titulo 2">
-        Eu sou um children texto puro
-      </Titulo>
-      <Titulo texto="Meu titulo 3" />
-      <Form />
+      <Nav />
+      {pathname === '/' ? <Home /> : <Produtos produtos={produtos} />}
     </>
   );
 };
