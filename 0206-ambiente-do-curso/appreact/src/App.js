@@ -1,48 +1,50 @@
 import React from 'react';
-// import ButtonModal from './ButtonModal';
-// import Modal from './Modal';
+import Produto from './Produto';
+
+const urls = {
+  tablet: 'https://ranekapi.origamid.dev/json/api/produto/tablet',
+  smartphone: 'https://ranekapi.origamid.dev/json/api/produto/smartphone',
+  notebook: 'https://ranekapi.origamid.dev/json/api/produto/notebook',
+};
+
+const btns = {
+  marginRight: '1em',
+};
 
 const App = () => {
-  // const [ativo, setAtivo] = React.useState(true);
-  // const [dados, setDados] = React.useState({ nome: 'André', idade: '30' });
-  // const [modal, setModal] = React.useState(() => window.localStorage.getItem('ativo'));
-  // const [modal, setModal] = React.useState(false);
-  // const [items, setItems] = React.useState('Teste');
+  const [loader, setLoader] = React.useState(false);
+  const [produto, setProduto] = React.useState(null);
 
-  // const handleClick = () => {
-  //   setAtivo(!ativo);
-  //   setDados({ ...dados, faculdade: 'Possui faculdade' });
-  //   // items = 'Outro'; // Errado
-  //   setItems('Outro'); // Correto
+  const capitalize = (str) => `${str[0].toUpperCase()}${str.slice(1)}`;
+
+  // const loadUrl = (url) => {
+  //   setProduto(null);
+  //   setLoader(true);
+  //   fetch(url)
+  //     .then((response) => response.json())
+  //     .then((responseJSON) => setProduto(responseJSON))
+  //     .finally(() => setLoader(false));
   // };
 
-  const [contar, setContar] = React.useState(1);
-  const [items, setItems] = React.useState(['Item 1']);
-
-  const handleClick = () => {
-    setContar((contar) => {
-      // setItems((items) => [...items, 'Item ' + (contar + 1)]); // Isso cria efeito colateral (StrictMode)
-      return contar + 1;
-    });
-    setItems([...items, 'Item ' + (contar + 1)]);
+  const loadUrl = async (url) => {
+    setLoader(true);
+    const response = await fetch(url);
+    const responseJSON = await response.json();
+    setProduto(responseJSON);
+    setLoader(false);
   };
 
   return (
     <>
-      {items.map((item) => (
-        <li key={item}>{item}</li>
+      {Object.keys(urls).map((key) => (
+        <button key={key} style={btns} onClick={() => loadUrl(urls[key])}>
+          {capitalize(key)}
+        </button>
       ))}
-      <button onClick={handleClick}>{contar}</button>
-
-      {/* <p>{items}</p>
-      <button onClick={handleClick}>Clicar</button>
-      <p>{modal ? 'True' : 'False'}</p>
-      <Modal modal={modal} setModal={setModal} />
-      <ButtonModal setModal={setModal} />
-      <p>{dados.nome}</p>
-      <p>{dados.idade}</p>
-      <p>{dados.faculdade}</p>
-      <button onClick={handleClick}>{ativo ? 'Ativo' : 'Inativo'}</button> */}
+      {/* {loader ? <p>Carregando...</p> : null} */}
+      {/* {produto ? <Produto produto={produto} /> : null} */}
+      {loader && <p>Carregando...</p>}
+      {!loader && produto && <Produto produto={produto} />}
     </>
   );
 };
