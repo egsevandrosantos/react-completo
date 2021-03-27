@@ -1,24 +1,26 @@
 import React from 'react';
-import Home from './Home';
-import Nav from './Nav';
-import Produtos from './Produtos';
-
-// Replique a interface como a apresentada na aula
-// Utilize a array abaixo para mostrar os produtos
-// Quebre em componentes o que precisar ser reutilizado
-// Dica: const { pathname } = window.location; (puxa o caminho do URL)
-const produtos = [
-  { nome: 'Notebook', propriedades: ['16gb ram', '512gb'] },
-  { nome: 'Smartphone', propriedades: ['2gb ram', '128gb'] },
-];
+import ButtonModal from './ButtonModal';
+import Modal from './Modal';
 
 const App = () => {
-  const { pathname } = window.location;
+  const [ativo, setAtivo] = React.useState(true);
+  const [dados, setDados] = React.useState({ nome: 'André', idade: '30' });
+  const [modal, setModal] = React.useState(false);
+
+  const handleClick = () => {
+    setAtivo(!ativo);
+    setDados({ ...dados, faculdade: 'Possui faculdade' });
+  };
 
   return (
     <>
-      <Nav />
-      {pathname === '/' ? <Home /> : <Produtos produtos={produtos} />}
+      <p>{modal ? 'True' : 'False'}</p>
+      <Modal modal={modal} setModal={setModal} />
+      <ButtonModal setModal={setModal} />
+      <p>{dados.nome}</p>
+      <p>{dados.idade}</p>
+      <p>{dados.faculdade}</p>
+      <button onClick={handleClick}>{ativo ? 'Ativo' : 'Inativo'}</button>
     </>
   );
 };
