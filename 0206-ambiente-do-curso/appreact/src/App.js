@@ -1,23 +1,23 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import Form from './form/Form';
+
+const Teste = () => {
+  const active = false;
+  return active ? <p>Teste</p> : null;
+};
 
 const App = () => {
-  const handleClick = (event) => {
-    console.log(event.target);
-  };
-
-  const handleScroll = (event) => {
-    console.log(event);
-  };
-
-  window.addEventListener('scroll', handleScroll);
-
   return (
-    <div style={{ height: '200vh' }}>
-      <button onClick={handleClick}>
-        {/* onMouseMove={handleClick} */}
-        Clique!
-      </button>
-    </div>
+    <Fragment>
+      {/* React.Fragment desestruturado no import */}
+      <Teste />
+      <Header />
+      <p>App</p>
+      <Form />
+      <Footer />
+    </Fragment>
   );
 };
 
