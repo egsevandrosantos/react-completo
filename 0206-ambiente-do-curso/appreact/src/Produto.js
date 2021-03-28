@@ -1,20 +1,11 @@
 import React from 'react';
 
-const Produto = () => {
-  React.useEffect(() => {
-    const handleScroll = (ev) => {
-      console.log(ev);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    }; // onDestroy
-  }, []);
-
+const Produto = ({ produto }) => {
   return (
-    <div style={{ height: '200vh' }}>
-      <p>Meu produto</p>
-    </div>
+    <>
+      <h1>{produto.nome}</h1>
+      <p>R$ {(+produto.preco).toFixed(2)}</p>
+    </>
   );
 };
 
