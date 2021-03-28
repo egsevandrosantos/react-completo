@@ -1,20 +1,20 @@
 import React from 'react';
 
-const Produto = ({ produto }) => {
-  const formatarPreco = (preco) => `R$ ${(+preco).toFixed(2)}`;
+const Produto = () => {
+  React.useEffect(() => {
+    const handleScroll = (ev) => {
+      console.log(ev);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    }; // onDestroy
+  }, []);
 
   return (
-    <>
-      <h1>{produto.nome}</h1>
-      <p>{formatarPreco(produto.preco)}</p>
-      {produto.fotos.map((foto) => (
-        <img
-          key={`${produto.id}${foto.titulo}`}
-          src={foto.src}
-          alt={produto.nome}
-        />
-      ))}
-    </>
+    <div style={{ height: '200vh' }}>
+      <p>Meu produto</p>
+    </div>
   );
 };
 

@@ -1,51 +1,43 @@
 import React from 'react';
 import Produto from './Produto';
 
-const urls = {
-  tablet: 'https://ranekapi.origamid.dev/json/api/produto/tablet',
-  smartphone: 'https://ranekapi.origamid.dev/json/api/produto/smartphone',
-  notebook: 'https://ranekapi.origamid.dev/json/api/produto/notebook',
-};
-
-const btns = {
-  marginRight: '1em',
-};
-
 const App = () => {
-  const [loader, setLoader] = React.useState(false);
-  const [produto, setProduto] = React.useState(null);
+  const [contar, setContar] = React.useState(0);
+  const [dados, setDados] = React.useState(null);
+  const [ativo, setAtivo] = React.useState(false);
 
-  const capitalize = (str) => `${str[0].toUpperCase()}${str.slice(1)}`;
+  React.useEffect(() => {
+    fetch('https://ranekapi.origamid.dev/json/api/produto/notebook')
+      .then((response) => response.json())
+      .then((responseJSON) => setDados(responseJSON));
+  }, []);
 
-  // const loadUrl = (url) => {
-  //   setProduto(null);
-  //   setLoader(true);
-  //   fetch(url)
-  //     .then((response) => response.json())
-  //     .then((responseJSON) => setProduto(responseJSON))
-  //     .finally(() => setLoader(false));
-  // };
+  // React.useEffect(() => {
+  //   console.log('Executou');
+  // }); // Executa sempre (no primeiro render e todas as vezes que muda estado)
 
-  const loadUrl = async (url) => {
-    setLoader(true);
-    const response = await fetch(url);
-    const responseJSON = await response.json();
-    setProduto(responseJSON);
-    setLoader(false);
-  };
+  // React.useEffect(() => {
+  //   console.log('Executou');
+  // }, []); // Executa apenas no primeiro render ([] = sem dependencia)
+
+  // React.useEffect(() => {
+  //   console.log('Executou effect contar');
+  //   document.title = 'Total ' + contar;
+  // }, [contar]); // Executa toda vez que o estado de contar mudar (no primeiro render executa pois está mudando o estado (definindo))
 
   return (
-    <>
-      {Object.keys(urls).map((key) => (
-        <button key={key} style={btns} onClick={() => loadUrl(urls[key])}>
-          {capitalize(key)}
-        </button>
-      ))}
-      {/* {loader ? <p>Carregando...</p> : null} */}
-      {/* {produto ? <Produto produto={produto} /> : null} */}
-      {loader && <p>Carregando...</p>}
-      {!loader && produto && <Produto produto={produto} />}
-    </>
+    <div>
+      {ativo && <Produto />}
+      <button onClick={() => setAtivo(!ativo)}>Ativar</button>
+      {dados && (
+        <div>
+          <h1>{dados.nome}</h1>
+          <p>R$ {dados.preco}</p>
+          <p>Total: R$ {(+dados.preco * +contar).toFixed(2)}</p>
+        </div>
+      )}
+      <button onClick={() => setContar(contar + 1)}>{contar}</button>
+    </div>
   );
 };
 
