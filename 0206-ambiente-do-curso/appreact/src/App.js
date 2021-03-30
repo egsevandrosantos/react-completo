@@ -1,53 +1,59 @@
 import React from 'react';
-import Produto from './Produto';
-
-// Quando o usuário clicar em um dos botões, faça um fetch do produto clicado utilizando a api abaixo
-// https://ranekapi.origamid.dev/json/api/produto/notebook
-// https://ranekapi.origamid.dev/json/api/produto/smartphone
-// Mostre o nome e preço na tela (separe essa informação em um componente Produto.js)
-// Defina o produto clicado como uma preferência do usuário no localStorage
-// Quando o usuário entrar no site, se existe um produto no localStorage, faça o fetch do mesmo
-
-const urls = {
-  notebook: 'https://ranekapi.origamid.dev/json/api/produto/notebook',
-  smartphone: 'https://ranekapi.origamid.dev/json/api/produto/smartphone',
-};
 
 const App = () => {
-  const [produto, setProduto] = React.useState(null);
-  const capitalize = (text) => `${text[0].toUpperCase()}${text.slice(1)}`;
+  // const video = React.useRef();
+  // const inputEl = React.useRef();
+  // const [comentarios, setComentarios] = React.useState([]);
+  // const [input, setInput] = React.useState('');
 
-  React.useEffect(() => {
-    produto && localStorage.setItem('produto', produto.id);
-  }, [produto]);
+  // React.useEffect(() => {
+  //   // console.log(video);
+  //   // console.log(video.current.currentTime);
+  // }, []);
+  // console.log(video); // Aqui não está definido pois o DOM ainda não foi criado
 
-  React.useEffect(() => {
-    const produtoKey = localStorage.getItem('produto');
-    produtoKey && loadProduct(urls[produtoKey]);
-  }, []);
+  // const handleClick = () => {
+  //   setComentarios([...comentarios, input]);
+  //   setInput('');
+  //   inputEl.current.focus();
+  // };
 
-  const loadProduct = (url) => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((json) => {
-        setProduto(json);
-      });
-  };
+  // return (
+  //   <div>
+  //     <ul>
+  //       {comentarios.map((comentario) => (
+  //         <li key={comentario}>{comentario}</li>
+  //       ))}
+  //     </ul>
+  //     <input
+  //       ref={inputEl}
+  //       type="text"
+  //       value={input}
+  //       onChange={({ target }) => setInput(target.value)}
+  //     />
+  //     <br />
+  //     <button onClick={handleClick}>Enviar</button>
+  //   </div>
+  // );
+  // return <video ref={video} />;
+  const [carrinho, setCarrinho] = React.useState(0);
+  const [notificacao, setNotificacao] = React.useState(null);
+  const timeoutRef = React.useRef();
+
+  function handleClick() {
+    setCarrinho(carrinho + 1);
+    setNotificacao('Item adicionado ao carrinho');
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setNotificacao(null);
+    }, 3000);
+  }
 
   return (
-    <>
-      <h1>Preferência: {produto && produto.nome}</h1>
-      {Object.keys(urls).map((key) => (
-        <button
-          style={{ marginRight: '1rem' }}
-          key={key}
-          onClick={() => loadProduct(urls[key])}
-        >
-          {capitalize(key)}
-        </button>
-      ))}
-      {produto && <Produto produto={produto} />}
-    </>
+    <div>
+      <p>{notificacao}</p>
+      <button onClick={handleClick}>Adicionar Carrinho {carrinho}</button>
+    </div>
   );
 };
 
