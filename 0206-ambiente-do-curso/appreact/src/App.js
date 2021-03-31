@@ -1,59 +1,83 @@
 import React from 'react';
 
-const App = () => {
-  // const video = React.useRef();
-  // const inputEl = React.useRef();
-  // const [comentarios, setComentarios] = React.useState([]);
-  // const [input, setInput] = React.useState('');
+// function operacaoLenta() {
+//   let c = 0;
 
-  // React.useEffect(() => {
-  //   // console.log(video);
-  //   // console.log(video.current.currentTime);
-  // }, []);
-  // console.log(video); // Aqui não está definido pois o DOM ainda não foi criado
+//   for (let i = 0; i < 100000000; i++) {
+//     c += i / 10;
+//   }
 
-  // const handleClick = () => {
-  //   setComentarios([...comentarios, input]);
-  //   setInput('');
-  //   inputEl.current.focus();
-  // };
+//   return c;
+// }
 
-  // return (
-  //   <div>
-  //     <ul>
-  //       {comentarios.map((comentario) => (
-  //         <li key={comentario}>{comentario}</li>
-  //       ))}
-  //     </ul>
-  //     <input
-  //       ref={inputEl}
-  //       type="text"
-  //       value={input}
-  //       onChange={({ target }) => setInput(target.value)}
-  //     />
-  //     <br />
-  //     <button onClick={handleClick}>Enviar</button>
-  //   </div>
-  // );
-  // return <video ref={video} />;
-  const [carrinho, setCarrinho] = React.useState(0);
-  const [notificacao, setNotificacao] = React.useState(null);
-  const timeoutRef = React.useRef();
+const set1 = new Set();
+const set2 = new Set();
 
-  function handleClick() {
-    setCarrinho(carrinho + 1);
-    setNotificacao('Item adicionado ao carrinho');
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      setNotificacao(null);
-    }, 3000);
-  }
+const Produto = () => {
+  const func1 = () => {
+    console.log('Teste');
+  };
+
+  const func2 = React.useCallback(() => {
+    console.log('Teste');
+  }, []);
+
+  set1.add(func1); // func1 é criada varias vezes
+  set2.add(func2); // func2 é criada uma unica vez (useCallback)
+  console.log(set1, set2);
 
   return (
     <div>
-      <p>{notificacao}</p>
-      <button onClick={handleClick}>Adicionar Carrinho {carrinho}</button>
+      <p onClick={func1}>Produto 1</p>
+      <p onClick={func2}>Produto 2</p>
     </div>
+  );
+};
+
+const App = () => {
+  // const [contar, setContar] = React.useState(0);
+  // const valor = React.useMemo(() => {
+  //   const localItem = window.localStorage.getItem('produto');
+  //   console.log('Memo');
+  //   return localItem;
+  // }, []);
+  // const valorContar = React.useMemo(() => {
+  //   console.log('Memo Contar');
+  //   return contar;
+  // }, [contar]);
+  // const t1 = performance.now();
+  // const valorOperacaoLenta = React.useMemo(() => {
+  //   console.log('Use memo operacaoLenta'); // Chama apenas uma vez
+  //   return operacaoLenta();
+  // }, []); // Sem [] chama a todo momento
+  // const t2 = performance.now();
+
+  // // Medir performance de operacaoLenta
+  // //const t1 = performance.now();
+  // // const valorOperacaoLenta = operacaoLenta(); // Aqui chama varias vezes
+  // //const t2 = performance.now();
+  // console.log(t2 - t1);
+
+  // return (
+  //   <>
+  //     <button onClick={() => setContar(contar + 1)}>{contar}</button>
+  //     <p>{valor}</p>
+  //     <p>{valorContar}</p>
+  //     <p>{valorOperacaoLenta}</p>
+  //   </>
+  // );
+
+  const [contar, setContar] = React.useState(0);
+
+  // const handleClick = React.useCallback(() => {
+  //   setContar((contar) => contar + 1);
+  // }, []);
+
+  return (
+    <>
+      <Produto />
+      <button onClick={() => setContar(contar + 1)}>{contar}</button>
+    </>
   );
 };
 
