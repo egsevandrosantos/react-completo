@@ -1,23 +1,15 @@
 import React from 'react';
-// import UserContext from './UserContext';
-import { GlobalContext } from './GlobalContext';
+import Fotos from './Fotos';
 
-const Produto = () => {
-  const global = React.useContext(GlobalContext);
+const Produto = ({ produto }) => {
   return (
     <>
-      <div>Produto: {global.nome}</div>
-      <p>Contar: {global.contar}</p>
-      <button onClick={() => global.setContar((contar) => contar + 1)}>
-        Contar
-      </button>
-      <button onClick={global.adicionarDois}>Contar 2</button>
+      <p>Nome: {produto.nome}</p>
+      <p>Preço: R$ {(+produto.preco).toFixed(2)}</p>
+      <Fotos nome={produto.nome} fotos={produto.fotos} />
+      <hr />
     </>
   );
-  // const dados = React.useContext(UserContext);
-  // console.log(dados);
-
-  // return <div>{dados.nome}</div>;
 };
 
 export default Produto;

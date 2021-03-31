@@ -3,15 +3,28 @@ import React from 'react';
 export const GlobalContext = React.createContext();
 
 export const GlobalStorage = ({ children }) => {
-  const [contar, setContar] = React.useState(0);
+  const [produtos, setProdutos] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
 
-  const adicionarDois = () => {
-    setContar(() => contar + 2);
-  };
+  const limparDados = React.useCallback(() => {
+    setProdutos(null);
+  }, []);
+
+  const carregarDados = React.useCallback(() => {
+    setLoading(true);
+    fetch('https://ranekapi.origamid.dev/json/api/produto/')
+      .then((response) => response.json())
+      .then((responseJSON) => setProdutos(responseJSON))
+      .finally(() => setLoading(false));
+  }, []);
+
+  React.useEffect(() => {
+    carregarDados();
+  }, [carregarDados]);
 
   return (
     <GlobalContext.Provider
-      value={{ nome: 'André', contar, setContar, adicionarDois }}
+      value={{ produtos, setProdutos, limparDados, carregarDados, loading }}
     >
       {children}
     </GlobalContext.Provider>
