@@ -1,8 +1,13 @@
 import React from 'react';
 
+// Otimize o código do slide anterior
+// Utilizando a array abaixo para mostrar
+// cada checkbox na tela.
+
+const coresArray = ['azul', 'roxo', 'laranja', 'verde', 'vermelho', 'cinza'];
+
 const App = () => {
-  const [termos, setTermos] = React.useState(false);
-  const [cores, setCores] = React.useState(['Vermelho']);
+  const [cores, setCores] = React.useState([]);
 
   const handleChange = ({ target }) => {
     if (target.checked) {
@@ -12,35 +17,29 @@ const App = () => {
     }
   };
 
+  const handleChecked = (cor) => cores.includes(cor);
+
+  // const capitalize = (text) => `${text[0].toUpperCase()}${text.slice(1)}`;
+
   return (
     <form>
-      <label>
-        <input
-          type="checkbox"
-          value="Azul"
-          onChange={handleChange}
-          checked={cores.includes('Azul')}
-        />
-        Azul
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="Vermelho"
-          onChange={handleChange}
-          checked={cores.includes('Vermelho')}
-        />
-        Vermelho
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          value="Termos"
-          checked={termos}
-          onChange={({ target }) => setTermos(target.checked)}
-        />
-        Aceito os termos.
-      </label>
+      {coresArray.map((cor) => (
+        <label key={cor} style={{ textTransform: 'capitalize' }}>
+          <input
+            type="checkbox"
+            value={cor}
+            checked={handleChecked(cor)}
+            onChange={handleChange}
+          />
+          {cor}
+          {/* {capitalize(cor)} */}
+        </label>
+      ))}
+      <ul>
+        {cores.map((cor) => (
+          <li key={cor}>{cor}</li>
+        ))}
+      </ul>
     </form>
   );
 };
