@@ -1,33 +1,45 @@
 import React from 'react';
 
 const App = () => {
-  const [produto, setProduto] = React.useState('');
+  const [termos, setTermos] = React.useState(false);
+  const [cores, setCores] = React.useState(['Vermelho']);
 
   const handleChange = ({ target }) => {
-    setProduto(target.value);
+    if (target.checked) {
+      setCores([...cores, target.value]);
+    } else {
+      setCores(cores.filter((cor) => cor !== target.value));
+    }
   };
 
   return (
     <form>
       <label>
         <input
-          type="radio"
-          name="produto"
-          value="smartphone"
-          checked={produto === 'smartphone'}
+          type="checkbox"
+          value="Azul"
           onChange={handleChange}
+          checked={cores.includes('Azul')}
         />
-        Smartphone
+        Azul
       </label>
       <label>
         <input
-          type="radio"
-          name="produto"
-          value="notebook"
-          checked={produto === 'notebook'}
+          type="checkbox"
+          value="Vermelho"
           onChange={handleChange}
+          checked={cores.includes('Vermelho')}
         />
-        Notebook
+        Vermelho
+      </label>
+      <label>
+        <input
+          type="checkbox"
+          value="Termos"
+          checked={termos}
+          onChange={({ target }) => setTermos(target.checked)}
+        />
+        Aceito os termos.
       </label>
     </form>
   );
