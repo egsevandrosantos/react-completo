@@ -1,23 +1,34 @@
 import React from 'react';
 
 const App = () => {
-  const [select, setSelect] = React.useState('');
+  const [produto, setProduto] = React.useState('');
+
+  const handleChange = ({ target }) => {
+    setProduto(target.value);
+  };
+
   return (
     <form>
-      <select
-        name=""
-        id=""
-        value={select}
-        onChange={({ target }) => setSelect(target.value)}
-      >
-        <option disabled value="">
-          Selecione
-        </option>
-        <option value="notebook">Notebook</option>
-        <option value="smartphone">Smartphone</option>
-        <option value="tablet">Tablet</option>
-      </select>
-      {select}
+      <label>
+        <input
+          type="radio"
+          name="produto"
+          value="smartphone"
+          checked={produto === 'smartphone'}
+          onChange={handleChange}
+        />
+        Smartphone
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="produto"
+          value="notebook"
+          checked={produto === 'notebook'}
+          onChange={handleChange}
+        />
+        Notebook
+      </label>
     </form>
   );
 };
