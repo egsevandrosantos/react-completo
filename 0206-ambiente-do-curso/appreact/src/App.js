@@ -1,53 +1,71 @@
 import React from 'react';
-import useFetch from './useFetch';
-import useLocalStorage from './useLocalStorage';
 
 const App = () => {
-  const [produto, setProduto] = useLocalStorage('produto', '');
-  const { request, data, loading, error } = useFetch();
+  const [form, setForm] = React.useState({
+    nome: '',
+    email: '',
+  });
 
-  const downcase = (text) =>
-    text ? `${text[0].toLowerCase()}${text.slice(1)}` : '';
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(event);
+  };
 
-  const handleClick = ({ target }) => setProduto(downcase(target.innerText));
-
-  React.useEffect(() => {
-    (async () => {
-      const { response, json } = await request(
-        'https://ranekapi.origamid.dev/json/api/produto/'
-      );
-      console.log(response, json);
-    })();
-    // const fetchData = async () => {
-    //   const { response, json } = await request(
-    //     'https://ranekapi.origamid.dev/json/api/produto/'
-    //   );
-    //   console.log(response, json);
-    // };
-    // fetchData();
-    // request('https://ranekapi.origamid.dev/json/api/produto/').then(
-    //   ({ response, json }) => {
-    //     console.log(response, json);
-    //   }
-    // );
-  }, [request]);
+  const handleOnChange = ({ target }) => {
+    const { id, value } = target;
+    setForm({ ...form, [id]: value });
+  };
 
   return (
-    <>
-      <p>{produto}</p>
-      <button onClick={handleClick}>Notebook</button>
-      <button onClick={handleClick}>Smartphone</button>
-      {loading && <p>Carregando...</p>}
-      {!loading &&
-        data &&
-        data.map((item) => (
-          <React.Fragment key={item.id}>
-            <h1>{item.nome}</h1>
-          </React.Fragment>
-        ))}
-      {!loading && error && <p>{error}</p>}
-    </>
+    <form onSubmit={handleSubmit}>
+      <label htmlFor="nome">Nome</label>
+      <input
+        id="nome"
+        name="nome"
+        type="text"
+        value={form.nome}
+        onChange={handleOnChange}
+      />
+      <p>{form.nome}</p>
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value={form.email}
+        onChange={handleOnChange}
+      />
+      <p>{form.email}</p>
+      <button type="submit">Enviar</button>
+    </form>
   );
+
+  // const [nome, setNome] = React.useState('');
+  // const [email, setEmail] = React.useState('');
+
+  // return (
+  //   <form onSubmit={handleSubmit}>
+  //     <label htmlFor="nome">Nome</label>
+  //     <input
+  //       id="nome"
+  //       name="nome"
+  //       type="text"
+  //       value={nome}
+  //       onChange={({ target }) => setNome(target.value)}
+  //     />
+  //     <p>{nome}</p>
+  //     <label htmlFor="email">Email</label>
+  //     <input
+  //       type="email"
+  //       id="email"
+  //       name="email"
+  //       value={email}
+  //       onChange={({ target }) => setEmail(target.value)}
+  //     />
+  //     <p>{email}</p>
+  //     <button type="submit">Enviar</button>
+  //   </form>
+  // );
 };
 
 export default App;
