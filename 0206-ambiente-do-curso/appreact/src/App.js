@@ -1,5 +1,5 @@
 import React from 'react';
-import Pergunta from './Pergunta';
+import Radio from './Form/Radio';
 
 const perguntas = [
   {
@@ -37,60 +37,49 @@ const perguntas = [
 ];
 
 const App = () => {
-  const [pIndex, setPIndex] = React.useState(0);
   const [respostas, setRespostas] = React.useState(
     perguntas.reduce((acc, field) => ({ ...acc, [field.id]: '' }), {})
   );
-  const [error, setError] = React.useState(null);
+  const [slide, setSlide] = React.useState(0);
+  const [resultado, setResultado] = React.useState(null);
 
-  const handleClick = () => {
-    let error;
-
-    const pergunta = perguntas[pIndex];
-    const resposta = respostas[pergunta.id];
-
-    if (!resposta || !resposta.toString().trim()) {
-      error = 'Selecione uma resposta';
-    }
-
-    setError(error);
-    !error && setPIndex(pIndex + 1);
+  const resultadoFinal = () => {
+    const corretas = perguntas.filter(
+      ({ id, resposta }) => respostas[id] === resposta
+    );
+    setResultado(`Você acertou: ${corretas.length} de ${perguntas.length}`);
   };
 
-  const calcularAcertos = () =>
-    perguntas.reduce(
-      (acc, { resposta, id }) => acc + (resposta === respostas[id] ? 1 : 0),
-      0
-    );
+  const handleChange = ({ target }) => {
+    setRespostas({ ...respostas, [target.id]: target.value });
+  };
+
+  const handleClick = () => {
+    if (slide < perguntas.length - 1) {
+      setSlide(slide + 1);
+    } else {
+      setSlide(slide + 1);
+      resultadoFinal();
+    }
+  };
 
   return (
-    <>
-      {perguntas[pIndex] && (
-        <>
-          <Pergunta
-            pergunta={perguntas[pIndex]}
-            error={error}
-            setError={setError}
-            setRespostas={setRespostas}
-          />
-          <button onClick={handleClick}>Próxima</button>
-        </>
+    <form onSubmit={(event) => event.preventDefault()}>
+      {perguntas.map((pergunta, index) => (
+        <Radio
+          active={slide === index}
+          key={pergunta.id}
+          value={respostas[pergunta.id]}
+          onChange={handleChange}
+          {...pergunta}
+        />
+      ))}
+      {resultado ? (
+        <p>{resultado}</p>
+      ) : (
+        <button onClick={handleClick}>Próxima</button>
       )}
-      {!perguntas[pIndex] && (
-        <>
-          <p>
-            {calcularAcertos()} acerto(s) de {perguntas.length} pergunta(s)
-          </p>
-          {perguntas.map((pergunta) => (
-            <React.Fragment key={pergunta.id}>
-              <h3>Pergunta: {pergunta.pergunta}</h3>
-              <p>Sua resposta: {respostas[pergunta.id]}</p>
-              <p>Resposta correta: {pergunta.resposta}</p>
-            </React.Fragment>
-          ))}
-        </>
-      )}
-    </>
+    </form>
   );
 };
 
